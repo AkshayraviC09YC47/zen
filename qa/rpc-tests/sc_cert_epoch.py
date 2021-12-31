@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2014 The Bitcoin Core developers
 # Copyright (c) 2018 The Zencash developers
 # Distributed under the MIT software license, see the accompanying
@@ -158,7 +158,7 @@ class sc_cert_epoch(BitcoinTestFramework):
         try:
             self.nodes[0].sc_send_certificate(scid, epoch_number, quality, epoch_cum_tree_hash, proof_bad, amounts_bad, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             assert(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert_equal("sidechain has insufficient funds" in errorString, True)
@@ -172,7 +172,7 @@ class sc_cert_epoch(BitcoinTestFramework):
             cert_epoch_0 = self.nodes[0].sc_send_certificate(scid, epoch_number, quality, epoch_cum_tree_hash, proof, amounts, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             mark_logs("Node 0 performs a bwd transfer of {} coins to Node2 address via cert {}.".format(bwt_amount, cert_epoch_0), self.nodes, DEBUG_MODE)
             assert(len(cert_epoch_0) > 0)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -198,7 +198,7 @@ class sc_cert_epoch(BitcoinTestFramework):
         try:
             self.nodes[2].sendtoaddress(self.nodes[3].getnewaddress(), bwt_amount/2)
             assert(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert_equal("Insufficient funds" in errorString, True)
@@ -218,7 +218,7 @@ class sc_cert_epoch(BitcoinTestFramework):
             cert_epoch_1 = self.nodes[0].sc_send_certificate(scid, epoch_number, quality, epoch_cum_tree_hash, proof, [], FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             mark_logs("Node 0 send a certificate {} with no bwd transfers".format(cert_epoch_1), self.nodes, DEBUG_MODE)
             assert(len(cert_epoch_1) > 0)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -238,7 +238,7 @@ class sc_cert_epoch(BitcoinTestFramework):
             speding_bwd_tx = self.nodes[2].sendtoaddress(self.nodes[3].getnewaddress(), bwt_amount/2)
             mark_logs("Node 2 spends epoch 0 certificate with tx {}".format(speding_bwd_tx), self.nodes, DEBUG_MODE)
             assert(len(speding_bwd_tx) > 0)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Spending bwt founds failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
             assert(False)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2014 The Bitcoin Core developers
 # Copyright (c) 2018 The Zencash developers
 # Distributed under the MIT software license, see the accompanying
@@ -136,7 +136,7 @@ class ScCertDust(BitcoinTestFramework):
                     epoch_cum_tree_hash, proof, bwt_cert, FT_SC_FEE, MBTR_SC_FEE)
             except JSONRPCException as e:
                 error_string = e.error['message']
-                print ("Send certificate failed with reason {}".format(error_string))
+                print("Send certificate failed with reason {}".format(error_string))
                 assert_true(False)
 
             sync_blocks(self.nodes[0:2])
@@ -190,7 +190,7 @@ class ScCertDust(BitcoinTestFramework):
             assert False
         except JSONRPCException as e:
             error_string = e.error['message']
-            print ("======> " + error_string)
+            print("======> " + error_string)
 
         try:
             mark_logs("Node 0 sends a cert with a bwd transfers of {} coins to Node2 ... expecting failure".format(dust_amount), self.nodes, DEBUG_MODE)
@@ -199,11 +199,11 @@ class ScCertDust(BitcoinTestFramework):
             assert False
         except JSONRPCException as e:
             error_string = e.error['message']
-            print ("======> " + error_string)
+            print("======> " + error_string)
 
         bal = self.nodes[2].getbalance()
         utx = self.nodes[2].listunspent()
-        print ("Node2 balance = {}".format(bal))
+        print("Node2 balance = {}".format(bal))
         assert_equal(bal, 2*bwt_amount)
 
         # the dust threshold for a bwt (54 Zat) is lower than the one for a standard output due to the replay protection
@@ -222,7 +222,7 @@ class ScCertDust(BitcoinTestFramework):
             assert False
         except JSONRPCException as e:
             error_string = e.error['message']
-            print (error_string)
+            print(error_string)
 
         # we can spend a pair of them instead
         mark_logs("Node2 tries to spent both utxo from bwt sending {} coins to Node0".format(bal), self.nodes, DEBUG_MODE)
@@ -237,10 +237,10 @@ class ScCertDust(BitcoinTestFramework):
             rawtx   = self.nodes[2].sendrawtransaction(rawtx['hex'])
         except JSONRPCException as e:
             error_string = e.error['message']
-            print (error_string)
+            print(error_string)
             assert False
 
-        print ("tx = {}".format(rawtx))
+        print("tx = {}".format(rawtx))
 
         sync_blocks(self.nodes[0:2])
         sync_mempools(self.nodes[0:2])

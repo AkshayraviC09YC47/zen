@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2014 The Bitcoin Core developers
 # Copyright (c) 2018 The Zencash developers
 # Distributed under the MIT software license, see the accompanying
@@ -109,7 +109,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
             scid = res['scid']
             pprint.pprint(res)
             self.sync_all()
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString,self.nodes,DEBUG_MODE)
             assert_true(False)
@@ -117,7 +117,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         tx_fee  = self.nodes[1].getrawmempool(True)[tx]['fee']
         tx_size = self.nodes[1].getrawmempool(True)[tx]['size']
         rate = get_fee_rate(tx_size, tx_fee)
-        print "tx fee={}, sz={}, feeRate={}".format(tx_fee, tx_size, rate)
+        print("tx fee={}, sz={}, feeRate={}".format(tx_fee, tx_size, rate))
         assert_true(isclose(CUSTOM_FEE_RATE_ZAT_PER_BYTE, rate))
 
         mark_logs("\nNode 0 generates 1 block", self.nodes, DEBUG_MODE)
@@ -136,7 +136,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             tx = self.nodes[2].sendtoaddress(taddr, Decimal(0.000001))
             assert_true(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString,self.nodes,DEBUG_MODE)
 
@@ -153,7 +153,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             tx = self.nodes[2].sc_send(outputs, cmdParms)
             assert_true(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString,self.nodes,DEBUG_MODE)
 
@@ -164,14 +164,14 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             tx = self.nodes[2].sc_send(outputs, cmdParms)
             self.sync_all()
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString,self.nodes,DEBUG_MODE)
             assert_true(False)
 
         tx_fee  = self.nodes[1].getrawmempool(True)[tx]['fee']
         tx_size = self.nodes[1].getrawmempool(True)[tx]['size']
-        print "tx fee={}, sz={}, feeRate={}".format(tx_fee, tx_size, get_fee_rate(tx_size, tx_fee))
+        print("tx fee={}, sz={}, feeRate={}".format(tx_fee, tx_size, get_fee_rate(tx_size, tx_fee)))
         assert_equal(fee, tx_fee)
 
         # set the fee to null and send another one
@@ -180,14 +180,14 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             tx = self.nodes[2].sc_send(outputs, cmdParms)
             self.sync_all()
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString,self.nodes,DEBUG_MODE)
             assert_true(False)
 
         tx_fee  = self.nodes[1].getrawmempool(True)[tx]['fee']
         tx_size = self.nodes[1].getrawmempool(True)[tx]['size']
-        print "tx fee={}, sz={}, feeRate={}".format(tx_fee, tx_size, get_fee_rate(tx_size, tx_fee))
+        print("tx fee={}, sz={}, feeRate={}".format(tx_fee, tx_size, get_fee_rate(tx_size, tx_fee)))
 
         mark_logs("\nNode 1 sends some certificate to sc...", self.nodes, DEBUG_MODE)
         # advance epoch
@@ -211,9 +211,9 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             cert = self.nodes[1].sc_send_certificate(scid, epoch_number, q,
                 epoch_cum_tree_hash, proof, bwt_cert, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print "Send certificate failed with reason {}".format(errorString)
+            print("Send certificate failed with reason {}".format(errorString))
             assert(False)
         self.sync_all()
  
@@ -221,7 +221,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
 
         cert_fee  = self.nodes[1].getrawmempool(True)[cert]['fee']
         cert_size = self.nodes[1].getrawmempool(True)[cert]['size']
-        print "cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, get_fee_rate(cert_size, cert_fee))
+        print("cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, get_fee_rate(cert_size, cert_fee)))
         assert_equal(CERT_FEE, cert_fee)
 
         #==============================================================
@@ -235,9 +235,9 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
             cert = self.nodes[1].sc_send_certificate(scid, epoch_number, q,
                 epoch_cum_tree_hash, proof, bwt_cert, FT_SC_FEE, MBTR_SC_FEE, Decimal('0.000006'))
             assert(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print "Send certificate failed (as expected) with reason {}".format(errorString)
+            print("Send certificate failed (as expected) with reason {}".format(errorString))
 
         #==============================================================
         q = 11
@@ -249,9 +249,9 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             cert = self.nodes[1].sc_send_certificate(scid, epoch_number, q,
                 epoch_cum_tree_hash, proof, bwt_cert, FT_SC_FEE, MBTR_SC_FEE, Decimal("0.0"))
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print "Send certificate failed with reason {}".format(errorString)
+            print("Send certificate failed with reason {}".format(errorString))
             assert(False)
         self.sync_all()
  
@@ -259,7 +259,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
 
         cert_fee  = self.nodes[1].getrawmempool(True)[cert]['fee']
         cert_size = self.nodes[1].getrawmempool(True)[cert]['size']
-        print "cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, get_fee_rate(cert_size, cert_fee))
+        print("cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, get_fee_rate(cert_size, cert_fee)))
         assert_equal(Decimal('0.0'), cert_fee)
 
 
@@ -274,9 +274,9 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             cert = self.nodes[1].sc_send_certificate(scid, epoch_number, q,
                 epoch_cum_tree_hash, proof, bwt_cert, FT_SC_FEE, MBTR_SC_FEE)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print "Send certificate failed with reason {}".format(errorString)
+            print("Send certificate failed with reason {}".format(errorString))
             assert(False)
         self.sync_all()
  
@@ -285,7 +285,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         cert_fee  = self.nodes[1].getrawmempool(True)[cert]['fee']
         cert_size = self.nodes[1].getrawmempool(True)[cert]['size']
         rate = get_fee_rate(cert_size, cert_fee)
-        print "cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, rate)
+        print("cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, rate))
         assert_true(isclose(CUSTOM_FEE_RATE_ZAT_PER_BYTE, rate))
 
         #==============================================================
@@ -300,9 +300,9 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         try:
             cert = self.nodes[1].sc_send_certificate(scid, epoch_number, q,
                 epoch_cum_tree_hash, proof, bwt_cert, FT_SC_FEE, MBTR_SC_FEE, fee)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print "Send certificate failed with reason {}".format(errorString)
+            print("Send certificate failed with reason {}".format(errorString))
             assert(False)
         self.sync_all()
  
@@ -311,7 +311,7 @@ class ScRpcCmdsFeeHandling(BitcoinTestFramework):
         cert_fee  = self.nodes[1].getrawmempool(True)[cert]['fee']
         cert_size = self.nodes[1].getrawmempool(True)[cert]['size']
         rate = get_fee_rate(cert_size, cert_fee)
-        print "cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, rate)
+        print("cert fee={}, sz={}, feeRate={}".format(cert_fee, cert_size, rate))
         assert_true(isclose(CUSTOM_FEE_RATE_ZAT_PER_BYTE, rate))
 
 

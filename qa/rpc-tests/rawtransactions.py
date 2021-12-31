@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2014 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -105,9 +105,9 @@ class RawTransactionsTest(BitcoinTestFramework):
         errorString = ""
         try:
             rawtx   = self.nodes[2].sendrawtransaction(rawtx['hex'])
-        except JSONRPCException,e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print errorString
+            print(errorString)
 
         assert_equal("Missing inputs" in errorString, True);
 
@@ -253,7 +253,7 @@ class RawTransactionsTest(BitcoinTestFramework):
 
         try:
             rawtx=self.nodes[0].createrawtransaction([], {}, [], sc_cr_bad)
-        except JSONRPCException,e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             assert_equal("withdrawalEpochLength" in errorString, True)
 
@@ -264,7 +264,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         sigRawtx = self.nodes[0].signrawtransaction(rawtx)
         try:
             finalRawtx = self.nodes[0].sendrawtransaction(sigRawtx['hex'])
-        except JSONRPCException,e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             assert_equal("vin-empty" in errorString, True)
 
@@ -428,9 +428,9 @@ class RawTransactionsTest(BitcoinTestFramework):
             sigRawtx = self.nodes[0].signrawtransaction(funded_tx['hex'])
             finalRawtx = self.nodes[0].sendrawtransaction(sigRawtx['hex'])
             decoded_tx = self.nodes[0].decoderawtransaction(sigRawtx['hex'])
-        except JSONRPCException,e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print "===> ", errorString
+            print("===> ", errorString)
             assert(False)
 
         self.sync_all()
@@ -526,9 +526,9 @@ class RawTransactionsTest(BitcoinTestFramework):
         error_occurred = False
         try:
             self.nodes[0].sendrawtransaction(sigRawtx['hex'])
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print errorString
+            print(errorString)
             error_occurred = True
 
         assert_true(error_occurred)
@@ -543,9 +543,9 @@ class RawTransactionsTest(BitcoinTestFramework):
         error_occurred = False
         try:
             self.nodes[0].sendrawtransaction(sigRawtx['hex'])
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print errorString
+            print(errorString)
             error_occurred = True
 
         assert_true(error_occurred, "CSW with more coins that available for the SC balance "
@@ -565,9 +565,9 @@ class RawTransactionsTest(BitcoinTestFramework):
         error_occurred = False
         try:
             self.nodes[0].sendrawtransaction(sigRawtx['hex'])
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
-            print errorString
+            print(errorString)
             error_occurred = True
 
         assert_true(error_occurred, "CSW with more coins that available for the SC balance considering mempool "

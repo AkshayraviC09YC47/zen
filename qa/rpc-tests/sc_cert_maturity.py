@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2014 The Bitcoin Core developers
 # Copyright (c) 2018 The Zencash developers
 # Distributed under the MIT software license, see the accompanying
@@ -127,7 +127,7 @@ class sc_cert_maturity(BitcoinTestFramework):
                 epoch_cum_tree_hash, proof, amounts, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             mark_logs("==> certificate is {}".format(cert_1), self.nodes, DEBUG_MODE)
             self.sync_all()
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Send certificate failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
             assert(False)
@@ -180,7 +180,7 @@ class sc_cert_maturity(BitcoinTestFramework):
                 epoch_cum_tree_hash, proof, amounts, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             mark_logs("==> certificate is {}".format(cert_2), self.nodes, DEBUG_MODE)
             self.sync_all()
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Send certificate failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
             assert(False)
@@ -260,9 +260,9 @@ class sc_cert_maturity(BitcoinTestFramework):
         mark_logs("Node0 generates 4 more blocks approaching the ceasing limit height", self.nodes, DEBUG_MODE)
         self.nodes[0].generate(4)
         self.sync_all()
-        print "Height=", self.nodes[0].getblockcount()
-        print "Ceasing at h =", self.nodes[0].getscinfo("*")['items'][0]['ceasingHeight']
-        print "State =", self.nodes[0].getscinfo("*")['items'][0]['state']
+        print("Height=", self.nodes[0].getblockcount())
+        print("Ceasing at h =", self.nodes[0].getscinfo("*")['items'][0]['ceasingHeight'])
+        print("State =", self.nodes[0].getscinfo("*")['items'][0]['state'])
         assert_equal(self.nodes[0].getscinfo("*")['items'][0]['state'], "ALIVE")
 
         epoch_number, epoch_cum_tree_hash = get_epoch_data(scid, self.nodes[0], EPOCH_LENGTH)
@@ -277,7 +277,7 @@ class sc_cert_maturity(BitcoinTestFramework):
             cert_3 = self.nodes[0].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, [], FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             mark_logs("==> certificate is {}".format(cert_3), self.nodes, DEBUG_MODE)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Send certificate failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
 
@@ -315,7 +315,7 @@ class sc_cert_maturity(BitcoinTestFramework):
         try:
             ret = self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), Decimal("3.5")) 
             assert_true(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Send failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
 
@@ -327,7 +327,7 @@ class sc_cert_maturity(BitcoinTestFramework):
         try:
             ret = self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), Decimal("3.5")) 
             mark_logs("Send succeeded {}".format(ret), self.nodes, DEBUG_MODE)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Send failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
             assert_true(False)

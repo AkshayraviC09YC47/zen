@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2014 The Bitcoin Core developers
 # Copyright (c) 2018 The Zencash developers
 # Distributed under the MIT software license, see the accompanying
@@ -120,7 +120,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
             cert_epoch_0_1 = self.nodes[1].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, amount_cert_1, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             node1_bal = node1_bal - CERT_FEE
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs("Send certificate failed with reason {}".format(errorString), self.nodes, DEBUG_MODE)
             assert(False)
@@ -153,7 +153,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
         try:
             cert_epoch_0_2 = self.nodes[0].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, amount_cert_2, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -189,7 +189,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
             cert_epoch_1_3 = self.nodes[1].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, amount_cert_3, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             node1_bal = node1_bal - CERT_FEE
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -206,7 +206,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
             cert_epoch_1_3 = self.nodes[1].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, amount_cert_3, FT_SC_FEE, MBTR_SC_FEE, 3*CERT_FEE)
             node1_bal = node1_bal - 3*CERT_FEE
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -222,7 +222,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
         try:
             cert_epoch_1_4 = self.nodes[0].sc_send_certificate(scid, epoch_number, quality_h,
                 epoch_cum_tree_hash, proof, amount_cert_4, FT_SC_FEE, MBTR_SC_FEE, 2*CERT_FEE)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -239,7 +239,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
             cert_epoch_1_3 = self.nodes[1].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, amount_cert_3, FT_SC_FEE, MBTR_SC_FEE, 2*CERT_FEE)
             node1_bal = node1_bal - 2*CERT_FEE
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -274,7 +274,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
             cert_epoch_2_5 = self.nodes[1].sc_send_certificate(scid, epoch_number, quality,
                 epoch_cum_tree_hash, proof, amount_cert_5, FT_SC_FEE, MBTR_SC_FEE, CERT_FEE)
             node1_bal = node1_bal - CERT_FEE
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
             assert(False)
@@ -331,7 +331,7 @@ class sc_cert_quality_wallet(BitcoinTestFramework):
         try:
             tx = self.nodes[2].sendtoaddress(taddr1, amount3)
             assert(False)
-        except JSONRPCException, e:
+        except JSONRPCException as e:
             errorString = e.error['message']
             mark_logs(errorString, self.nodes, DEBUG_MODE)
 

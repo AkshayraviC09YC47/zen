@@ -76,7 +76,7 @@ def fill_ws_send_certificate_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_send_certificate_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['certificateHash']
 
 #----------------------------------------------------------------
@@ -98,7 +98,7 @@ def fill_ws_get_single_block_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_get_single_block_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['height'], jrsp['responsePayload']['hash'], jrsp['responsePayload']['block']
 
 #----------------------------------------------------------------
@@ -117,7 +117,7 @@ def fill_ws_get_new_block_hashes_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_get_new_block_hashes_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['height'], jrsp['responsePayload']['hashes']
 
 #----------------------------------------------------------------
@@ -136,7 +136,7 @@ def fill_ws_get_block_headers_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_get_block_headers_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['headers']
 
 #----------------------------------------------------------------
@@ -160,7 +160,7 @@ def fill_ws_get_multiple_block_hashes_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_get_multiple_block_hashes_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['height'], jrsp['responsePayload']['hashes']
 
 
@@ -179,7 +179,7 @@ def fill_ws_get_top_quality_certificates_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_get_top_quality_certificates_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['mempoolTopQualityCert'], jrsp['responsePayload']['chainTopQualityCert']
 
 # for negative tests
@@ -201,7 +201,7 @@ def fill_ws_test_input(args):
     return json.dumps(msg, default=EncodeDecimal)
 
 def fill_ws_test_output(jrsp):
-    print "Json Received '%s'" % jrsp
+    print("Json Received '%s'"%(jrsp))
     return jrsp['responsePayload']['height'], jrsp['responsePayload']['hash'], jrsp['responsePayload']['block']
 
 def fill_ws_cmd_input(method, args):
@@ -239,13 +239,13 @@ class WsServiceProxy(object):
 
         json_data = fill_ws_cmd_input(method, args)
 
-        print "################## Sending ######################"
+        print("################## Sending ######################")
         log.debug("-%s-> %s %s (ws msg send)"%(WsServiceProxy.__id_count, method,
                                  json.dumps(args, default=EncodeDecimal)))
         ws.send(json_data)
-        print "Sent! Receiving..."
+        print("Sent! Receiving...")
         resp =  ws.recv()
-        print "Received '%s'" % resp
+        print("Received '%s'"%(resp))
 
         jrsp = json.loads(resp)
         log.debug("-%s-> %s %s (ws response got)"%(WsServiceProxy.__id_count, method,
@@ -276,18 +276,18 @@ class WsServiceProxy(object):
         if self.__ws_url is None:
             raise JSONWSException("No Websocket URL (zend -websocket=1 has been set?")
 
-        print "##### connecting to ws_url {} ######################".format(self.__ws_url)
-        print "##### ws method:", method
-        print "##### data:", args
+        print("##### connecting to ws_url {} ######################".format(self.__ws_url))
+        print("##### ws method:", method)
+        print("##### data:", args)
 
         ws = create_connection(self.__ws_url)
         try:
             resp = self.ws_cmd(method, args, ws)
-        except JSONWSException, e:
+        except JSONWSException as e:
             raise
-        except Exception, e:
+        except Exception as e:
             ws.close()
-            print "hhhhhhhhhhhhhhhhhhh ", str(e)
+            print("hhhhhhhhhhhhhhhhhhh ", str(e))
             raise JSONWSException("Exception got invoking WS req [{}] at [{}]".format(method, self.__ws_url))
 
         ws.close()
