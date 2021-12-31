@@ -39,7 +39,7 @@ from .equihash import (
     zcash_person,
 )
 
-from test_framework.util import bytes_to_hex_str, hex_str_to_bytes, COIN
+from .util import hex_str_to_bytes, bytes_to_hex_str, COIN
 
 BIP0031_VERSION = 60000
 MY_VERSION = 170002  # past bip-31 for ping/pong
@@ -167,7 +167,7 @@ def deser_uint256_vector(f):
 
 
 def ser_uint256_vector(l):
-    r = ""
+    r = b""
     if len(l) < 253:
         r = chr(len(l))
     elif len(l) < 0x10000:
@@ -197,7 +197,7 @@ def deser_string_vector(f):
 
 
 def ser_string_vector(l):
-    r = ""
+    r = b""
     if len(l) < 253:
         r = chr(len(l))
     elif len(l) < 0x10000:
@@ -227,7 +227,7 @@ def deser_int_vector(f):
 
 
 def ser_int_vector(l):
-    r = ""
+    r = b""
     if len(l) < 253:
         r = chr(len(l))
     elif len(l) < 0x10000:
@@ -266,7 +266,7 @@ def deser_char_vector(f):
 
 
 def ser_char_vector(l):
-    r = ""
+    r = b""
     if len(l) < 253:
         r = chr(len(l))
     elif len(l) < 0x10000:
@@ -296,7 +296,7 @@ class CAddress(object):
         self.port = struct.unpack(">H", f.read(2))[0]
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<Q", self.nServices)
         r += self.pchReserved
         r += socket.inet_aton(self.ip)
@@ -323,7 +323,7 @@ class CInv(object):
         self.hash = deser_uint256(f)
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<i", self.type)
         r += ser_uint256(self.hash)
         return r
@@ -343,7 +343,7 @@ class CBlockLocator(object):
         self.vHave = deser_uint256_vector(f)
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<i", self.nVersion)
         r += ser_uint256_vector(self.vHave)
         return r
@@ -478,7 +478,7 @@ class JSDescription(object):
             self.ciphertexts.append(f.read(ZC_NOTECIPHERTEXT_SIZE))
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<q", self.vpub_old)
         r += struct.pack("<q", self.vpub_new)
         r += ser_uint256(self.anchor)
@@ -521,7 +521,7 @@ class COutPoint(object):
 
 
 class CTxIn(object):
-    def __init__(self, outpoint=None, scriptSig="", nSequence=0):
+    def __init__(self, outpoint=None, scriptSig=b"", nSequence=0):
         if outpoint is None:
             self.prevout = COutPoint()
         else:
@@ -549,7 +549,7 @@ class CTxIn(object):
 
 
 class CTxOut(object):
-    def __init__(self, nValue=0, scriptPubKey=""):
+    def __init__(self, nValue=0, scriptPubKey=b""):
         self.nValue = nValue
         self.scriptPubKey = scriptPubKey
 
@@ -640,8 +640,7 @@ class CTransaction(object):
         if self.nVersion >= 2:
             r += " vjoinsplit=%s" % repr(self.vjoinsplit)
             if len(self.vjoinsplit) > 0:
-                r += " joinSplitPubKey=%064x joinSplitSig=%064x" \
-                    % (self.joinSplitPubKey, self.joinSplitSig)
+                r += " joinSplitPubKey=%064x joinSplitSig=%064x" %(self.joinSplitPubKey, self.joinSplitSig)
         r += ")"
         return r
 
@@ -688,7 +687,7 @@ class CBlockHeader(object):
         self.hash = None
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<i", self.nVersion)
         r += ser_uint256(self.hashPrevBlock)
         r += ser_uint256(self.hashMerkleRoot)
@@ -701,7 +700,7 @@ class CBlockHeader(object):
 
     def calc_sha256(self):
         if self.sha256 is None:
-            r = ""
+            r = b""
             r += struct.pack("<i", self.nVersion)
             r += ser_uint256(self.hashPrevBlock)
             r += ser_uint256(self.hashMerkleRoot)
@@ -829,7 +828,7 @@ class CUnsignedAlert(object):
         self.strReserved = deser_string(f)
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<i", self.nVersion)
         r += struct.pack("<q", self.nRelayUntil)
         r += struct.pack("<q", self.nExpiration)
@@ -910,7 +909,7 @@ class msg_version(object):
             self.nStartingHeight = None
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<i", self.nVersion)
         r += struct.pack("<Q", self.nServices)
         r += struct.pack("<q", self.nTime)
@@ -1114,7 +1113,7 @@ class msg_ping(object):
         self.nonce = struct.unpack("<Q", f.read(8))[0]
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<Q", self.nonce)
         return r
 
@@ -1132,7 +1131,7 @@ class msg_pong(object):
         self.nonce = struct.unpack("<Q", f.read(8))[0]
 
     def serialize(self):
-        r = ""
+        r = b""
         r += struct.pack("<Q", self.nonce)
         return r
 
@@ -1267,8 +1266,7 @@ class NodeConnCB(object):
             try:
                 self.cbmap[message.command](conn, message)
             except:
-                print("ERROR delivering %s (%s)" % (repr(message),
-                                                    sys.exc_info()[0]))
+                print("ERROR delivering %s (%s)" % (repr(message), sys.exc_info()[0]))
 
     def on_version(self, conn, message):
         if message.nVersion >= 209:
