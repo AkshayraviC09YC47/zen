@@ -25,6 +25,7 @@ import time
 import sys
 import random
 from io import StringIO
+from codecs import encode
 import hashlib
 from threading import RLock
 from threading import Thread
@@ -268,15 +269,15 @@ def deser_char_vector(f):
 def ser_char_vector(l):
     r = b""
     if len(l) < 253:
-        r = chr(len(l))
+        r = struct.pack("B", len(l))
     elif len(l) < 0x10000:
-        r = chr(253) + struct.pack("<H", len(l))
+        r = struct.pack("<BH", 253, len(l))
     elif len(l) < 0x100000000:
-        r = chr(254) + struct.pack("<I", len(l))
+        r = struct.pack("<BI", 254, len(l))
     else:
-        r = chr(255) + struct.pack("<Q", len(l))
+        r = struct.pack("<BQ", 255, len(l))
     for i in l:
-        r += chr(i)
+        r += struct.pack("B", i)
     return r
 
 
@@ -710,7 +711,7 @@ class CBlockHeader(object):
             r += ser_uint256(self.nNonce)
             r += ser_char_vector(self.nSolution)
             self.sha256 = uint256_from_str(hash256(r))
-            self.hash = hash256(r)[::-1].encode('hex_codec')
+            self.hash = encode(hash256(r)[::-1], 'hex_codec').decode('ascii')
 
     def rehash(self):
         self.sha256 = None

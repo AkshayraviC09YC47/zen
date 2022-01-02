@@ -4,12 +4,12 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
 
-from mininode import CBlock, CTransaction, CTxIn, CTxOut, COutPoint, ToHex
-from script import CScript, OP_0, OP_EQUAL, OP_HASH160, OP_DUP, OP_CHECKBLOCKATHEIGHT, OP_EQUALVERIFY, OP_CHECKSIG
+from test_framework.mininode import CBlock, CTransaction, CTxIn, CTxOut, COutPoint, ToHex
+from test_framework.script import OP_TRUE, CScript, OP_0, OP_EQUAL, OP_HASH160, OP_DUP, OP_CHECKBLOCKATHEIGHT, OP_EQUALVERIFY, OP_CHECKSIG
 from decimal import Decimal
 from io import StringIO
 from binascii import unhexlify, hexlify
-from util import hex_str_to_bytes, swap_bytes
+from test_framework.util import hex_str_to_bytes, swap_bytes, to_satoshis
 
 # Create a block (with regtest difficulty)
 def create_block(hashprev, coinbase, nTime=None, nBits=None):
@@ -160,10 +160,10 @@ def create_coinbase(heightAdjust = 0, comm_quota=85):
                 CScript([counter+heightAdjust, OP_0]), 0xffffffff))
     counter += 1
     coinbaseoutput = CTxOut()
-    coinbaseoutput.nValue = int(12.5*100000000)
+    coinbaseoutput.nValue = to_satoshis(12.5)
     halvings = int((counter+heightAdjust)/2000) # regtest
     coinbaseoutput.nValue >>= halvings
-    coinbaseoutput.scriptPubKey = ""
+    coinbaseoutput.scriptPubKey = CScript([OP_TRUE])
     coinbase.vout = [ coinbaseoutput ]
     if halvings == 0: # regtest
         comm_output = CTxOut()
