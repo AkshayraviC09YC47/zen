@@ -193,7 +193,7 @@ class TestManager(object):
 
         # --> error if not requested
         if not wait_until(blocks_requested, attempts=20*num_blocks):
-            # print [ c.cb.block_request_map for c in self.connections ]
+            # print([ c.cb.block_request_map for c in self.connections])
             raise AssertionError("Not all nodes requested block")
         # --> Answer request (we did this inline!)
 
