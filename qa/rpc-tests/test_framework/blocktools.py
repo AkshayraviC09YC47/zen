@@ -7,9 +7,9 @@
 from test_framework.mininode import CBlock, CTransaction, CTxIn, CTxOut, COutPoint, ToHex
 from test_framework.script import OP_TRUE, CScript, OP_0, OP_EQUAL, OP_HASH160, OP_DUP, OP_CHECKBLOCKATHEIGHT, OP_EQUALVERIFY, OP_CHECKSIG
 from decimal import Decimal
-from io import StringIO
+from io import BytesIO
 from binascii import unhexlify, hexlify
-from test_framework.util import hex_str_to_bytes, swap_bytes, to_satoshis
+from test_framework.util import bytes_to_hex_str, hex_str_to_bytes, hex_str_to_str, swap_bytes, to_satoshis
 
 # Create a block (with regtest difficulty)
 def create_block(hashprev, coinbase, nTime=None, nBits=None):
@@ -214,12 +214,12 @@ def create_tampered_rawtx_cbh(node_from, node_to, tx_amount, fee, mode):
 
     # build an object from the raw Tx in order to be able to modify it
     tx_01 = CTransaction()
-    f = StringIO(unhexlify(rawTx))
+    f = BytesIO(unhexlify(rawTx))
     tx_01.deserialize(f)
 
     # corrupt vouts in this Tx
     for vout_idx in range(len(tx_01.vout)):
-        decodedScriptOrig = node_from.decodescript(hexlify(tx_01.vout[vout_idx].scriptPubKey))
+        decodedScriptOrig = node_from.decodescript(bytes_to_hex_str(tx_01.vout[vout_idx].scriptPubKey))
 
         scriptOrigAsm = decodedScriptOrig['asm']
         params = scriptOrigAsm.split()

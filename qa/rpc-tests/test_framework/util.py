@@ -149,6 +149,17 @@ def initialize_datadir(dirname, n):
 #        f.write("logtimemicros=1\n");
     return datadir
 
+def rpc_url(i, rpchost=None):
+    host = '127.0.0.1'
+    port = rpc_port(i)
+    if rpchost:
+        parts = rpchost.split(':')
+        if len(parts) == 2:
+            host, port = parts
+        else:
+            host = rpchost
+    return "http://rt:rt@%s:%d" % (host, int(port))
+
 def initialize_chain(test_dir):
     """
     Create (or copy from cache) a 200-block-long chain and
@@ -269,7 +280,7 @@ def start_node(i, dirname, extra_args=None, rpchost=None, timewait=None, binary=
     if os.getenv("PYTHON_DEBUG", ""):
         print("start_node: calling zen-cli -rpcwait getblockcount returned")
     devnull.close()
-    url = "http://rt:rt@%s:%d" % (rpchost or '127.0.0.1', rpc_port(i))
+    url = rpc_url(i, rpchost)
     if timewait is not None:
         proxy = AuthServiceProxy(url, ws_url=ws_url, timeout=timewait)
     else:
